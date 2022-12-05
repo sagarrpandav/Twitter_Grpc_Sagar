@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option go_package = "/auth";
+
+service Auth {
+  // Sends a greeting
+  rpc signUp (User) returns (User) {}
+  rpc signIn (LoginUser) returns (User) {}
+  rpc signOut (token) returns (ResponseMessage) {}
+  rpc validateUserLoggedIn(token) returns (ResponseMessage) {}
+}
+
+// The request message containing the user's information.
+message User {
+  uint32 Id = 1;
+  string FirstName = 2;
+  string LastName = 3;
+  string Email = 4;
+  string Password = 5;
+  string UserHash = 6;
+}
+
+message LoginUser {
+  string Email = 1;
+  string Password = 2;
+}
+
+message token {
+  string UserHash = 1;
+}
+
+// The response message containing the greetings
+message ResponseMessage {
+  string  message = 1;
+}
+
+message EmptyRequest {}
