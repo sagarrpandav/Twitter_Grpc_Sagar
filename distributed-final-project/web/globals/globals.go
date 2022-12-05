@@ -4,6 +4,8 @@ var Secret = []byte("secret")
 
 const Userkey = "user"
 
+var Userhash = make(map[string]string)
+
 type User struct {
 	Id int `json:"id" binding:"required"`
 	FirstName string `json:"firstName" binding:"required"`
@@ -15,6 +17,10 @@ type User struct {
 type LoginUser struct {
 	Email string `json:"userId" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type Token struct {
+	TokenHash string `json:"tokenHash" binding:"required"`
 }
 
 type Post struct {
@@ -30,6 +36,7 @@ type Followers struct {
 }
 
 var Users []User
+var Posts []Post
 
 func init()  {
 	print("Initializing")
