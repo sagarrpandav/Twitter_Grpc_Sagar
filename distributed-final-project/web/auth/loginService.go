@@ -12,7 +12,7 @@ func LoginPostHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		loginUserCred := globals.LoginUser{}
 
-		if err := c.BindJSON(&loginUserCred); err!=nil{
+		if err := c.BindJSON(&loginUserCred); err != nil {
 			_ = c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
@@ -21,8 +21,8 @@ func LoginPostHandler() gin.HandlerFunc {
 		service := authGrpc.NewAuthClient(serviceDial)
 
 		loginUserProto := authGrpc.LoginUser{
-			Email:     loginUserCred.Email,
-			Password:  loginUserCred.Password,
+			Email:    loginUserCred.Email,
+			Password: loginUserCred.Password,
 		}
 
 		user, err := service.SignIn(c, &loginUserProto)
@@ -33,7 +33,7 @@ func LoginPostHandler() gin.HandlerFunc {
 			})
 			return
 		} else {
-			c.SetCookie("userCookie", user.UserHash, 60, "/", "localhost", false, true)
+			c.SetCookie("userCookie", user.UserHash, 60, "/", "", false, true)
 			user.UserHash = ""
 			c.JSON(http.StatusOK, user)
 		}
@@ -43,7 +43,7 @@ func LoginPostHandler() gin.HandlerFunc {
 func signUpHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		newUser := globals.User{}
-		if err := c.BindJSON(&newUser); err!=nil{
+		if err := c.BindJSON(&newUser); err != nil {
 			_ = c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
@@ -83,10 +83,9 @@ func LogoutPostHandler() gin.HandlerFunc {
 
 		res, _ := service.SignOut(c, &userToken)
 
-		c.SetCookie("userCookie", res.GetMessage(), -1, "/", "localhost", false, true)
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.SetCookie("userCookie", res.GetMessage(), -1, "/", "", false, true)
+		c.JSON(http.StatusOK, gin.H{
 			"Success": "User Logged Out",
 		})
 	}
 }
-

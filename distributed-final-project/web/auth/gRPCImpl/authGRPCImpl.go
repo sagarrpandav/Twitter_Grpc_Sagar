@@ -14,14 +14,14 @@ type AuthApiServer struct {
 
 type ErrorCustomKey struct {
 	errorString string
-	message string
+	message     string
 }
 
 func (e *ErrorCustomKey) Error() string {
 	return e.errorString
 }
 
-func (*AuthApiServer) SignUp(c context.Context ,user *pb.User) (*pb.User, error) {
+func (*AuthApiServer) SignUp(c context.Context, user *pb.User) (*pb.User, error) {
 	err := ErrorCustomKey{}
 	for _, registeredUser := range db.Users {
 		if user.Email == registeredUser.Email {
@@ -33,7 +33,7 @@ func (*AuthApiServer) SignUp(c context.Context ,user *pb.User) (*pb.User, error)
 		hash := md5.Sum([]byte(user.Password + user.Email))
 		user.UserHash = hex.EncodeToString(hash[:])
 		newUser := db.User{
-			Id: len(db.Users),
+			Id:        int32(len(db.Users)),
 			FirstName: user.GetFirstName(),
 			LastName:  user.GetLastName(),
 			Email:     user.GetEmail(),
@@ -47,11 +47,11 @@ func (*AuthApiServer) SignUp(c context.Context ,user *pb.User) (*pb.User, error)
 
 func (*AuthApiServer) SignIn(ctx context.Context, userCredentials *pb.LoginUser) (*pb.User, error) {
 	for _, registeredUser := range db.Users {
-		if registeredUser.Email == userCredentials.Email &&  registeredUser.Password == userCredentials.Password {
+		if registeredUser.Email == userCredentials.Email && registeredUser.Password == userCredentials.Password {
 			hash := md5.Sum([]byte(userCredentials.Password + userCredentials.Email))
 			userHash := hex.EncodeToString(hash[:])
 			newUser := pb.User{
-				Id: uint32(len(db.Users)),
+				Id:        uint32(len(db.Users)),
 				FirstName: registeredUser.FirstName,
 				LastName:  registeredUser.LastName,
 				Email:     registeredUser.Email,

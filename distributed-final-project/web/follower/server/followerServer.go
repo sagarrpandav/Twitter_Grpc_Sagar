@@ -1,6 +1,7 @@
 package server
 
 import (
+	followImpl "distributed-final-project/web/follower/gRPCImpl"
 	pb "distributed-final-project/web/gen/follower"
 	"google.golang.org/grpc"
 	"log"
@@ -15,5 +16,10 @@ func CreateServer() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterFollowerServer(grpcServer, &followerI)
+	pb.RegisterFollowerServer(grpcServer, &followImpl.FollowerServer{})
+
+	err = grpcServer.Serve(listener)
+	if err != nil {
+		log.Fatal("Follower GRPC Error")
+	}
 }
