@@ -3,8 +3,8 @@ createAuth:
 	protoc --proto_path=auth/authpb auth/authpb/*.proto --go-grpc_out=gen
 
 createPost:
-	protoc --proto_path=post/postpb post/postpb/*.proto --go_out=gen
-	protoc --proto_path=post/postpb post/postpb/*.proto --go-grpc_out=gen
+	protoc --proto_path=feed/feedpb feed/feedpb/*.proto --go_out=gen
+	protoc --proto_path=feed/feedpb feed/feedpb/*.proto --go-grpc_out=gen
 
 createFollower:
 	protoc --proto_path=follower/followerpb follower/followerpb/*.proto --go_out=gen
@@ -12,3 +12,8 @@ createFollower:
 
 clean:
 	rm gen/*/*.go
+
+create:
+	make createAuth
+	make createPost
+	make createFollower
