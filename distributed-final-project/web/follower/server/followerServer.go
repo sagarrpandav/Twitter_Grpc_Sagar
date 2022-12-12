@@ -8,7 +8,7 @@ import (
 	"net"
 )
 
-func CreateServer() {
+func CreateFollowerServer() {
 	listener, err := net.Listen("tcp", "localhost:8092")
 	if err != nil {
 		log.Fatal(err)
