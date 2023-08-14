@@ -14,6 +14,7 @@ clean:
 	rm gen/*/*.go
 
 create:
+	make clean
 	make createAuth
 	make createPost
 	make createFollower

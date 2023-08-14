@@ -9,13 +9,13 @@ import (
 
 func FollowUserHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		serviceDial := grpcClientFactory.GetGRPCService("followService")
+		serviceDial := grpcClientFactory.GetGRPCService("followerService")
 		service := followGrpc.NewFollowerClient(serviceDial)
 
-		followUserProto := followGrpc.FollowRequest{
-			SelfId:      int32(100),
-			OtherUserId: int32(101),
-			Follow:      true,
+		followUserProto := followGrpc.FollowRequest{}
+		if err := context.BindJSON(&followUserProto); err != nil {
+			_ = context.AbortWithError(http.StatusBadRequest, err)
+			return
 		}
 
 		res, err := service.FollowUser(context, &followUserProto)

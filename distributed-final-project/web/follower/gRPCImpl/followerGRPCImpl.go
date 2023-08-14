@@ -19,32 +19,38 @@ func (e *ErrorCustomKey) Error() string {
 	return e.errorString
 }
 
-func (*FollowerServer) GetFollowers(context context.Context, followerRequest *pb.GetFollowersRequest) (*pb.ResponseMessage, error) {
+func (*FollowerServer) GetFollowers(context context.Context, followerRequest *pb.GetFollowersRequest) (*pb.FollowResponseMessage, error) {
 	for _, registeredUser := range db.Users {
 		if registeredUser.Id == followerRequest.SelfId {
-			response := pb.ResponseMessage{Message: string(registeredUser.Following)}
+			response := pb.FollowResponseMessage{Message: string(registeredUser.Following)}
 			return &response, nil
 		}
 	}
 	return nil, nil
 }
 
-func (*FollowerServer) FollowUser(context context.Context, followRequest *pb.FollowRequest) (*pb.ResponseMessage, error) {
+func (*FollowerServer) FollowUser(context context.Context, followRequest *pb.FollowRequest) (*pb.FollowResponseMessage, error) {
+	tmpUser := db.User{}
+	var slice = make([]db.User, len(db.Users))
 	for _, registeredUser := range db.Users {
 		if registeredUser.Id == followRequest.SelfId {
 			registeredUser.Following = append(registeredUser.Following, followRequest.OtherUserId)
-			response := pb.ResponseMessage{Message: string("success")}
+			slice = append(slice, registeredUser)
+			response := pb.FollowResponseMessage{Message: string("success")}
 			return &response, nil
+		} else {
+			slice = append(slice, registeredUser)
 		}
 	}
+	db.Users = append(db.Users, tmpUser)
 	return nil, nil
 }
 
-func (*FollowerServer) UnFollowUser(context context.Context, followRequest *pb.FollowRequest) (*pb.ResponseMessage, error) {
+func (*FollowerServer) UnFollowUser(context context.Context, followRequest *pb.FollowRequest) (*pb.FollowResponseMessage, error) {
 	for _, registeredUser := range db.Users {
 		if registeredUser.Id == followRequest.SelfId {
 			registeredUser.Following = remove(registeredUser.Following, followRequest.GetOtherUserId())
-			response := pb.ResponseMessage{Message: string("success")}
+			response := pb.FollowResponseMessage{Message: string("success")}
 			return &response, nil
 		}
 	}

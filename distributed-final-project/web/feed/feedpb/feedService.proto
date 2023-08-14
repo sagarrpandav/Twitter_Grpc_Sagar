@@ -3,9 +3,9 @@ syntax = "proto3";
 option go_package = "/feed";
 
 service Feed {
-  rpc addPost (Post) returns (ResponseMessage) {}
+  rpc addPost (Post) returns (FeedResponseMessage) {}
   rpc getPost (UserId) returns (MultiplePost) {}
-  rpc getUsers (EmptyRequest) returns (MultipleUser) {}
+  rpc getUsers (FeedEmptyRequest) returns (MultipleUser) {}
 }
 
 // The request message containing the Post's information.
@@ -26,13 +26,13 @@ message UserId {
 }
 
 // The response message containing the greetings
-message ResponseMessage {
+message FeedResponseMessage {
   string  message = 1;
 }
 
-message EmptyRequest {}
+message FeedEmptyRequest {}
 
-message User {
+message FeedUser {
   uint32 Id = 1;
   string FirstName = 2;
   string LastName = 3;
@@ -40,5 +40,5 @@ message User {
 }
 
 message MultipleUser {
-  repeated User users = 1;
+  repeated FeedUser users = 1;
 }

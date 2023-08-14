@@ -3,9 +3,9 @@ syntax = "proto3";
 option go_package = "/follower";
 
 service Follower {
-  rpc followUser (FollowRequest) returns (ResponseMessage) {}
-  rpc unFollowUser (FollowRequest) returns (ResponseMessage) {}
-  rpc getFollowers (GetFollowersRequest) returns (ResponseMessage) {}
+  rpc followUser (FollowRequest) returns (FollowResponseMessage) {}
+  rpc unFollowUser (FollowRequest) returns (FollowResponseMessage) {}
+  rpc getFollowers (GetFollowersRequest) returns (FollowResponseMessage) {}
 }
 
 message FollowRequest {
@@ -18,6 +18,6 @@ message GetFollowersRequest {
   int32 selfId = 1;
 }
 
-message ResponseMessage {
+message FollowResponseMessage {
   string message = 1;
 }
