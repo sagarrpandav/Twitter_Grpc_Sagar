@@ -19,7 +19,7 @@ func (e *ErrorCustomKey) Error() string {
 	return e.errorString
 }
 
-func (*FeedApiServer) AddPost(c context.Context, newPost *pb.Post) (*pb.ResponseMessage, error) {
+func (*FeedApiServer) AddPost(c context.Context, newPost *pb.Post) (*pb.FeedResponseMessage, error) {
 	post := db.Post{
 		PostId:     newPost.GetPostId(),
 		UserId:     newPost.GetUserId(),
@@ -48,12 +48,12 @@ func (*FeedApiServer) GetPost(c context.Context, user *pb.UserId) (*pb.MultipleP
 	return gRPCPosts, nil
 }
 
-func (*FeedApiServer) GetUsers(context.Context, *pb.EmptyRequest) (*pb.MultipleUser, error) {
+func (*FeedApiServer) GetUsers(context.Context, *pb.FeedEmptyRequest) (*pb.MultipleUser, error) {
 	gRPCUsers := &pb.MultipleUser{
-		Users: make([]*pb.User, 0),
+		Users: make([]*pb.FeedUser, 0),
 	}
 	for _, user := range db.Users {
-		u := pb.User{
+		u := pb.FeedUser{
 			Id:        uint32(user.Id),
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
